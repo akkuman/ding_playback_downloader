@@ -26,7 +26,6 @@ class Ding:
     
     async def process(self):
         url = f'https://login.dingtalk.com/oauth2/auth?client_id=dingavo6at488jbofmjs&response_type=code&scope=openid&redirect_uri=https%3A%2F%2Flv.dingtalk.com%2Fsso%2Flogin%3Fcontinue%3Dhttps%253A%252F%252Fh5.dingtalk.com%252Fgroup-live-share%252Findex.htm%253Ftype%253D2%2526liveFromType%253D6%2526liveUuid%253D{self.live_uuid}%2526bizType%253Ddingtalk%2526dd_nav_bgcolor%253DFF2C2D2F%2523%252Funion'
-        pc_session_id = None
         async with async_playwright() as p:
             browser = await p.chromium.launch(
                 # 指定本机google客户端exe的路径
@@ -44,13 +43,10 @@ class Ding:
             await page.wait_for_selector('#dingapp', timeout=0)
 
 
-async def _process(live_uuid: str):
-    d = Ding(live_uuid)
-    await d.process()
-
 async def request(flow: http.HTTPFlow) -> None:
     if not flow.request.path.startswith('/group-live-share/index.htm'):
         return
     live_uuid = flow.request.query.get('liveUuid')
     ctx.log.info(f'获取到liveUuid: {live_uuid}')
-    await _process(live_uuid)
+    d = Ding(live_uuid)
+    await d.process()
