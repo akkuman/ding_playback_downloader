@@ -1,6 +1,4 @@
 import re
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
 from mitmproxy import http
 from mitmproxy import ctx
 import requests
@@ -13,7 +11,6 @@ __EXECUTABLE_PATH__  = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\ch
 async def handle(route):
     response = await route.fetch()
     resp_json = await response.json()
-    ctx.log.info(resp_json)
     url = resp_json['openLiveDetailModel']['playbackUrl']
     title = resp_json['openLiveDetailModel']['title']
     ctx.log.info(f'获取到视频链接: [f{title}](f{url})')
