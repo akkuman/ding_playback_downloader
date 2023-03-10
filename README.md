@@ -32,7 +32,7 @@ __EXECUTABLE_PATH__  = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\ch
 首先打开代理
 
 ```shell
-mitmproxy -s ./main.py
+mitmweb -s ./main.py
 ```
 
 默认监听本机 8080 端口
