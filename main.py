@@ -7,7 +7,7 @@ import httpx
 from playwright.async_api import async_playwright
 
 # chrome.exe 的地址
-__EXECUTABLE_PATH__  = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+__EXECUTABLE_PATH__  = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
 # 线程数
 __THREAD__ = 4
 
@@ -71,9 +71,9 @@ class Ding:
 
 
 async def request(flow: http.HTTPFlow) -> None:
-    if not flow.request.path.startswith('/group-live-share/index.htm'):
-        return
-    live_uuid = flow.request.query.get('liveUuid')
-    ctx.log.info(f'获取到liveUuid: {live_uuid}')
-    d = Ding(live_uuid)
-    await d.process()
+    # 检查是否包含特定域名和查询参数
+    if 'n.dingtalk.com' in flow.request.pretty_url and 'liveUuid' in flow.request.query:
+        live_uuid = flow.request.query.get('liveUuid')
+        ctx.log.info(f'获取到liveUuid: {live_uuid}')
+        d = Ding(live_uuid)
+        await d.process()
